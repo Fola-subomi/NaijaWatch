@@ -1,0 +1,16 @@
+# Python virtual environment - never commit this
+venv/
+
+# Environment variables - never commit this
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Data files (can be large)
+data/
+
+# VS Code settings
+.vscode/
