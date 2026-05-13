@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NaijaWatch</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/iconfont/tabler-icons.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #000e05;
+      color: #018b58;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .header {
+      background: #018b58;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: rgba(255, 255, 255, 0.134);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text h1 { font-size: 18px; font-weight: 700; }
+    .logo-text p { font-size: 11px; opacity: 0.7; }
+
+    .header-badge {
+      font-size: 11px;
+      background: rgba(255,255,255,0.134);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .live-dot {
+      width: 7px; height: 7px;
+      background: #7defa1;
+      border-radius: 50%;
+      animation: blink 1.6s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* SEARCH */
+    .search-section {
+      background: #001302;
+      border-bottom: 1px solid #013a07;
+      padding: 16px 24px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1.5px solid #013a07;
+      border-radius: 8px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-input:focus { border-color: #018b58; }
+
+    .ask-btn {
+      padding: 10px 20px;
+      background: #018b58;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .ask-btn:hover { background: #153d22; }
+    .ask-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid #009d12;
+      background: #034e00;
+      color: #dbdbdb;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .chip:hover { border-color: #1a472a; color: #1a472a; background: #f0f7f2; }
+
+    /* MAIN LAYOUT */
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 0;
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    /* ANSWER PANEL */
+    .answer-panel {
+      background: #004a07;
+      border-radius: 10px;
+      border: 1px solid #003209;
+      margin-right: 16px;
+      min-height: 300px;
+      overflow: hidden;
+    }
+
+    .answer-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      color: #aaa;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .answer-placeholder i { font-size: 40px; }
+
+    .answer-loading {
+      display: none;
+      padding: 24px;
+      align-items: center;
+      gap: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid #ddd;
+      border-top-color: #1a472a;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .answer-content { display: none; padding: 20px; }
+    .answer-content.visible { display: block; }
+
+    .answer-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0ec;
+    }
+
+    .answer-header i { color: #1a472a; font-size: 18px; }
+    .answer-header span { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #666; }
+
+    .answer-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #2a2a2a;
+      white-space: pre-wrap;
+    }
+
+    .answer-sources {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0ec;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .sources-label { font-size: 11px; color: #aaa; }
+
+    .source-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid #e0e0db;
+      color: #666;
+      text-decoration: none;
+    }
+
+    .source-tag:hover { border-color: #1a472a; color: #1a472a; }
+
+    /* SIDEBAR */
+    .sidebar {}
+
+    .sidebar-card {
+      background: rgb(0, 30, 7);
+      border-radius: 10px;
+      border: 1px solid #004f0c;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #e1e1e1;
+      margin-bottom: 10px;
+    }
+
+    .zone-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 6px 8px;
+      font-size: 12px;
+      border: 1px solid #004f0c;
+      border-radius: 6px;
+      background: rgb(0, 30, 7);
+      color: #e1e1e1;
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: all 0.12s;
+    }
+
+    .zone-btn:hover { border-color: #1a472a; color: #1a472a; background: #f0f7f2; }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px solid #004f0c;
+    }
+
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: #888; }
+    .stat-val { font-weight: 600; color: #1a1a1a; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #e6e6e6;
+    }
+
+    @media (max-width: 680px) {
+      .main { grid-template-columns: 1fr; padding: 0 12px; }
+      .answer-panel { margin-right: 0; margin-bottom: 16px; }
+      .search-box { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🛡️</div>
+    <div class="logo-text">
+      <h1>NaijaWatch</h1>
+      <p>Nigeria Community Intelligence</p>
+    </div>
+  </div>
+  <div class="header-badge">
+    <div class="live-dot"></div>
+    Live feed
+  </div>
+</div>
+
+<div class="search-section">
+  <div class="search-box">
+    <input
+      type="text"
+      class="search-input"
+      id="queryInput"
+      placeholder="Ask anything — e.g. 'What attacks happened in Lagos this week?'"
+      onkeydown="if(event.key==='Enter') askQuestion()"
+    />
+    <button class="ask-btn" id="askBtn" onclick="askQuestion()">
+      <i class="ti ti-send"></i> Ask
+    </button>
+  </div>
+  <div class="quick-chips">
+    <span class="chip" onclick="ask('Recent kidnappings in North West Nigeria')">Kidnappings in North West</span>
+    <span class="chip" onclick="ask('BEC fraud targeting Nigerian banks')">BEC fraud alerts</span>
+    <span class="chip" onclick="ask('Security situation in Abuja today')">Abuja security</span>
+    <span class="chip" onclick="ask('EFCC cybercrime arrests Nigeria')">EFCC arrests</span>
+    <span class="chip" onclick="ask('SIM swap fraud warnings Nigeria')">SIM-swap warnings</span>
+    <span class="chip" onclick="ask('Bandit attacks in Zamfara')">Zamfara attacks</span>
+    <span class="chip" onclick="ask('Unknown gunmen attacks South East Nigeria')">South East gunmen</span>
+    <span class="chip" onclick="ask('Pipeline vandalism Niger Delta')">Niger Delta</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="answer-panel">
+    <div class="answer-placeholder" id="placeholder">
+      <i class="ti ti-shield-search"></i>
+      Ask a question to get intelligence
+    </div>
+    <div class="answer-loading" id="loadingDiv">
+      <div class="spinner"></div>
+      Searching intelligence base...
+    </div>
+    <div class="answer-content" id="answerContent">
+      <div class="answer-header">
+        <i class="ti ti-sparkles"></i>
+        <span>Intelligence Summary</span>
+      </div>
+      <div class="answer-body" id="answerBody"></div>
+      <div class="answer-sources" id="answerSources"></div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Search by zone</div>
+      <button class="zone-btn" onclick="ask('Security incidents in North West Nigeria Kaduna Zamfara Katsina')">🗺 North West</button>
+      <button class="zone-btn" onclick="ask('Security incidents in North East Nigeria Borno Adamawa Yobe')">🗺 North East</button>
+      <button class="zone-btn" onclick="ask('Security incidents in North Central Nigeria Abuja Plateau Benue')">🗺 North Central</button>
+      <button class="zone-btn" onclick="ask('Security incidents in South West Nigeria Lagos Ogun Oyo')">🗺 South West</button>
+      <button class="zone-btn" onclick="ask('Security incidents in South South Nigeria Rivers Delta Edo')">🗺 South South</button>
+      <button class="zone-btn" onclick="ask('Security incidents in South East Nigeria Anambra Imo Enugu')">🗺 South East</button>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Threat types</div>
+      <button class="zone-btn" onclick="ask('Kidnapping incidents Nigeria')">👤 Kidnappings</button>
+      <button class="zone-btn" onclick="ask('Armed bandit attacks Nigeria')">🔫 Armed attacks</button>
+      <button class="zone-btn" onclick="ask('Cybercrime fraud Nigeria')">💻 Cybercrime</button>
+      <button class="zone-btn" onclick="ask('EFCC fraud arrests Nigeria')">🏦 Financial fraud</button>
+      <button class="zone-btn" onclick="ask('Terrorist insurgency Nigeria')">⚠️ Insurgency</button>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Data sources</div>
+      <div class="stat-row"><span class="stat-label">Punch</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+      <div class="stat-row"><span class="stat-label">Premium Times</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+      <div class="stat-row"><span class="stat-label">Daily Trust</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+      <div class="stat-row"><span class="stat-label">Vanguard</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+      <div class="stat-row"><span class="stat-label">EFCC advisories</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+      <div class="stat-row"><span class="stat-label">NCC bulletins</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  NaijaWatch — grounded in cited Nigerian sources. Verify before acting. &nbsp;|&nbsp;
+  <a href="http://localhost:8000/docs" target="_blank" style="color:#1a472a">API docs</a>
+</div>
+
+<script>
+  const API = "http://localhost:8000";
+
+  function ask(question) {
+    document.getElementById("queryInput").value = question;
+    askQuestion();
+  }
+
+  async function askQuestion() {
+    const question = document.getElementById("queryInput").value.trim();
+    if (!question) return;
+
+    // show loading
+    document.getElementById("placeholder").style.display = "none";
+    document.getElementById("answerContent").classList.remove("visible");
+    document.getElementById("loadingDiv").style.display = "flex";
+    document.getElementById("askBtn").disabled = true;
+
+    try {
+      const res = await fetch(`${API}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+
+      const data = await res.json();
+
+      // show answer
+      document.getElementById("loadingDiv").style.display = "none";
+      document.getElementById("answerContent").classList.add("visible");
+      document.getElementById("answerBody").textContent = data.answer;
+
+      // show sources
+      const srcDiv = document.getElementById("answerSources");
+      if (data.sources && data.sources.length > 0) {
+        srcDiv.innerHTML = '<span class="sources-label">Sources:</span> ' +
+          data.sources.map(s =>
+            `<a class="source-tag" href="${s.url}" target="_blank">${s.source}</a>`
+          ).join("");
+      } else {
+        srcDiv.innerHTML = "";
+      }
+
+    } catch (err) {
+      document.getElementById("loadingDiv").style.display = "none";
+      document.getElementById("answerContent").classList.add("visible");
+      document.getElementById("answerBody").textContent =
+        "Could not reach the backend. Make sure uvicorn is running on port 8000.";
+    }
+
+    document.getElementById("askBtn").disabled = false;
+  }
+</script>
+
+</body>
+</html>
