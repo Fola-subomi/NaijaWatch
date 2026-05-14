@@ -27,8 +27,8 @@ model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
 
 print("Connecting to Qdrant...")
 qdrant = QdrantClient(
-    host=os.getenv("QDRANT_HOST", "localhost"),
-    port=int(os.getenv("QDRANT_PORT", 6333))
+    url=os.getenv("QDRANT_HOST"),
+    api_key=os.getenv("QDRANT_API_KEY")
 )
 
 print("Connecting to Groq...")

@@ -12,6 +12,7 @@ docstring_parser==0.18.0
 fastapi==0.136.1
 filelock==3.29.0
 fsspec==2026.4.0
+groq==1.2.0
 grpcio==1.80.0
 h11==0.16.0
 h2==4.3.0
@@ -46,6 +47,7 @@ regex==2026.5.9
 requests==2.33.1
 rich==15.0.0
 safetensors==0.7.0
+schedule==1.2.2
 scikit-learn==1.8.0
 scipy==1.17.1
 sentence-transformers==5.4.1

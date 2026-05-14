@@ -7,7 +7,6 @@ from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 
 load_dotenv()
-
 QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
 COLLECTION_NAME = "naija_incidents"
@@ -39,7 +38,10 @@ def ingest():
     model = SentenceTransformer("intfloat/e5-small-v2")  # small = faster download
 
     print("Connecting to Qdrant...")
-    client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+    client = QdrantClient(
+    url=os.getenv("QDRANT_HOST"),
+    api_key=os.getenv("QDRANT_API_KEY")
+    )
 
     # create collection if needed
     sample_vec = model.encode("test")
