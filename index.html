@@ -512,6 +512,13 @@
   </div>
 </div>
 
+<div class="news-ticker">
+  <span class="ticker-label">🔴 Breaking</span>
+  <div class="ticker-track" id="tickerTrack">
+    <span style="opacity:0.6">Loading latest incidents...</span>
+  </div>
+</div>
+
 <div class="main">
   <div class="answer-panel">
     <div class="answer-placeholder" id="placeholder">
@@ -532,46 +539,144 @@
     </div>
   </div>
 
-  <div class="sidebar">
-    <div class="sidebar-card">
-      <div class="sidebar-title">Search by zone</div>
-      <button class="zone-btn" onclick="ask('Security incidents in North West Nigeria Kaduna Zamfara Katsina')">🗺 North West</button>
-      <button class="zone-btn" onclick="ask('Security incidents in North East Nigeria Borno Adamawa Yobe')">🗺 North East</button>
-      <button class="zone-btn" onclick="ask('Security incidents in North Central Nigeria Abuja Plateau Benue')">🗺 North Central</button>
-      <button class="zone-btn" onclick="ask('Security incidents in South West Nigeria Lagos Ogun Oyo')">🗺 South West</button>
-      <button class="zone-btn" onclick="ask('Security incidents in South South Nigeria Rivers Delta Edo')">🗺 South South</button>
-      <button class="zone-btn" onclick="ask('Security incidents in South East Nigeria Anambra Imo Enugu')">🗺 South East</button>
-    </div>
+ <div class="sidebar">
 
-    <div class="sidebar-card">
-      <div class="sidebar-title">Threat types</div>
-      <button class="zone-btn" onclick="ask('Kidnapping incidents Nigeria')">👤 Kidnappings</button>
-      <button class="zone-btn" onclick="ask('Armed bandit attacks Nigeria')">🔫 Armed attacks</button>
-      <button class="zone-btn" onclick="ask('Cybercrime fraud Nigeria')">💻 Cybercrime</button>
-      <button class="zone-btn" onclick="ask('EFCC fraud arrests Nigeria')">🏦 Financial fraud</button>
-      <button class="zone-btn" onclick="ask('Terrorist insurgency Nigeria')">⚠️ Insurgency</button>
+  <div class="recent-panel">
+    <div class="recent-header">
+      <span class="recent-title">Recent incidents</span>
+      <span class="live-badge">Live</span>
     </div>
-
-    <div class="sidebar-card">
-      <div class="sidebar-title">Data sources</div>
-      <div class="stat-row"><span class="stat-label">Punch</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
-      <div class="stat-row"><span class="stat-label">Premium Times</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
-      <div class="stat-row"><span class="stat-label">Daily Trust</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
-      <div class="stat-row"><span class="stat-label">Vanguard</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
-      <div class="stat-row"><span class="stat-label">EFCC advisories</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
-      <div class="stat-row"><span class="stat-label">NCC bulletins</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div id="recentNewsList">
+      <div style="padding:14px;font-size:12px;color:#aaa">Loading...</div>
     </div>
   </div>
-</div>
 
+  <div class="sidebar-card">
+    <div class="sidebar-title">Search by zone</div>
+    <button class="zone-btn" onclick="ask('Security incidents in North West Nigeria Kaduna Zamfara Katsina')">🗺 North West</button>
+    <button class="zone-btn" onclick="ask('Security incidents in North East Nigeria Borno Adamawa Yobe')">🗺 North East</button>
+    <button class="zone-btn" onclick="ask('Security incidents in North Central Nigeria Abuja Plateau Benue')">🗺 North Central</button>
+    <button class="zone-btn" onclick="ask('Security incidents in South West Nigeria Lagos Ogun Oyo')">🗺 South West</button>
+    <button class="zone-btn" onclick="ask('Security incidents in South South Nigeria Rivers Delta Edo')">🗺 South South</button>
+    <button class="zone-btn" onclick="ask('Security incidents in South East Nigeria Anambra Imo Enugu')">🗺 South East</button>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="sidebar-title">Threat types</div>
+    <button class="zone-btn" onclick="ask('Kidnapping incidents Nigeria')">👤 Kidnappings</button>
+    <button class="zone-btn" onclick="ask('Armed bandit attacks Nigeria')">🔫 Armed attacks</button>
+    <button class="zone-btn" onclick="ask('Cybercrime fraud Nigeria')">💻 Cybercrime</button>
+    <button class="zone-btn" onclick="ask('EFCC fraud arrests Nigeria')">🏦 Financial fraud</button>
+    <button class="zone-btn" onclick="ask('Terrorist insurgency Nigeria')">⚠️ Insurgency</button>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="sidebar-title">Data sources</div>
+    <div class="stat-row"><span class="stat-label">Punch</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div class="stat-row"><span class="stat-label">Premium Times</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div class="stat-row"><span class="stat-label">Daily Trust</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div class="stat-row"><span class="stat-label">Vanguard</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div class="stat-row"><span class="stat-label">EFCC advisories</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+    <div class="stat-row"><span class="stat-label">NCC bulletins</span><span class="stat-val" style="color:#2a9d3a">✓</span></div>
+  </div>
+</div>
+</div>
 <div class="footer">
   NaijaWatch — grounded in cited Nigerian sources. Verify before acting. &nbsp;|&nbsp;
   <a href="https://naijawatch-production.up.railway.app/docs" target="_blank" style="color:#1a472a">API docs</a>
 </div>
-
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+  <div class="popup-card">
+    <button class="popup-close" onclick="closePopup()">&times;</button>
+    <span class="popup-type" id="popupType"></span>
+    <div class="popup-title" id="popupTitle"></div>
+    <div class="popup-body" id="popupBody"></div>
+    <div class="popup-meta">
+      <span id="popupMeta"></span>
+      <button class="popup-ask-btn" onclick="askFromPopup()">Ask about this</button>
+    </div>
+  </div>
+</div>
 <script>
   const API = "https://naijawatch-production.up.railway.app";
+  let LIVE_NEWS = [];
+let currentPopupNews = null;
 
+function buildTicker() {
+  const track = document.getElementById("tickerTrack");
+  if (!LIVE_NEWS.length) return;
+  const items = [...LIVE_NEWS, ...LIVE_NEWS];
+  track.innerHTML = items.map((n, i) => `
+    <span class="ticker-item" onclick="openPopup(${i % LIVE_NEWS.length})">
+      <span class="ticker-dot" style="background:${n.typeText}"></span>
+      ${n.location}: ${n.title}
+    </span>
+  `).join("");
+}
+
+function buildRecentList() {
+  const list = document.getElementById("recentNewsList");
+  if (!LIVE_NEWS.length) {
+    list.innerHTML = '<div style="padding:14px;font-size:12px;color:#aaa">No incidents found</div>';
+    return;
+  }
+  list.innerHTML = LIVE_NEWS.map((n, i) => `
+    <div class="news-item" onclick="openPopup(${i})">
+      <span class="news-item-type" style="background:${n.typeColor};color:${n.typeText}">
+        ${n.typeLabel}
+      </span>
+      <div class="news-item-title">${n.title}</div>
+      <div class="news-item-meta">
+        <span>📍 ${n.location}</span>
+        <span>${n.time}</span>
+        <span>${n.source}</span>
+      </div>
+    </div>
+  `).join("");
+}
+
+function openPopup(index) {
+  const n = LIVE_NEWS[index];
+  if (!n) return;
+  currentPopupNews = n;
+  document.getElementById("popupType").textContent = n.typeLabel;
+  document.getElementById("popupType").style.background = n.typeColor;
+  document.getElementById("popupType").style.color = n.typeText;
+  document.getElementById("popupTitle").textContent = n.title;
+  document.getElementById("popupBody").textContent = n.body || "Click 'Ask about this' for more details.";
+  document.getElementById("popupMeta").textContent = `${n.source} · ${n.location} · ${n.time}`;
+  document.getElementById("popupOverlay").classList.add("visible");
+}
+
+function closePopup(event) {
+  if (!event || event.target === document.getElementById("popupOverlay")) {
+    document.getElementById("popupOverlay").classList.remove("visible");
+  }
+}
+
+function askFromPopup() {
+  closePopup();
+  if (currentPopupNews) ask(currentPopupNews.query);
+}
+
+async function loadRecentNews() {
+  try {
+    const res = await fetch(`${API}/recent`);
+    const data = await res.json();
+    if (data.incidents && data.incidents.length > 0) {
+      LIVE_NEWS = data.incidents;
+    }
+  } catch (e) {
+    console.log("Could not load live news:", e);
+  } finally {
+    buildTicker();
+    buildRecentList();
+  }
+}
+
+// load on startup then refresh every 5 minutes
+loadRecentNews();
+setInterval(loadRecentNews, 5 * 60 * 1000);
   function ask(question) {
     document.getElementById("queryInput").value = question;
     askQuestion();
@@ -616,7 +721,7 @@
       document.getElementById("loadingDiv").style.display = "none";
       document.getElementById("answerContent").classList.add("visible");
       document.getElementById("answerBody").textContent =
-        "Could not reach the backend. Make sure uvicorn is running on port 8000.";
+        "Could not reach the backend. Please try again in a moment.";
     }
 
     document.getElementById("askBtn").disabled = false;
