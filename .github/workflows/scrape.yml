@@ -1,1 +1,37 @@
+name: NaijaWatch Scraper
 
+on:
+  schedule:
+    # runs every 6 hours
+    - cron: '0 */6 * * *'
+  # also lets you trigger it manually from GitHub
+  workflow_dispatch:
+
+jobs:
+  scrape-and-ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 sentence-transformers qdrant-client python-dotenv
+
+      - name: Run scraper
+        env:
+          QDRANT_HOST: ${{ secrets.QDRANT_HOST }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: python scraper/scraper.py
+
+      - name: Run ingest
+        env:
+          QDRANT_HOST: ${{ secrets.QDRANT_HOST }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+        run: python scraper/ingest.py
