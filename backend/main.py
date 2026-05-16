@@ -119,3 +119,52 @@ Respond in this format:
 
     except Exception as e:
         return {"error": str(e), "answer": f"Backend error: {str(e)}", "sources": []}
+    
+@app.get("/recent")
+def recent():
+    try:
+        results, _ = qdrant.scroll(
+            collection_name=COLLECTION_NAME,
+            limit=10,
+            with_payload=True,
+            with_vectors=False
+        )
+        news = []
+        for r in results:
+            p = r.payload
+            tag = p.get("tag", "general")
+            type_map = {
+                "crime":       ("Armed Attack",  "#FAECE7", "#712B13"),
+                "kidnap":      ("Kidnapping",    "#FBEAF0", "#72243E"),
+                "cyber":       ("Cybercrime",    "#E6F1FB", "#0C447C"),
+                "fraud":       ("Fraud",         "#FAEEDA", "#633806"),
+                "advisory":    ("Advisory",      "#E8F5E9", "#1a472a"),
+                "northeast":   ("North East",    "#FAECE7", "#712B13"),
+                "northwest":   ("North West",    "#FAECE7", "#712B13"),
+                "northcentral":("North Central", "#FAECE7", "#712B13"),
+                "southwest":   ("South West",    "#E6F1FB", "#0C447C"),
+                "southsouth":  ("South South",   "#FAEEDA", "#633806"),
+                "southeast":   ("South East",    "#FBEAF0", "#72243E"),
+                "general":     ("Incident",      "#F5F5F0", "#555555"),
+            }
+            label, bg, color = type_map.get(tag, type_map["general"])
+            title = p.get("title", "")
+            body = p.get("body", "")
+            scraped_at = p.get("scraped_at", "")
+            time_label = scraped_at[:10] if scraped_at else "Recent"
+            news.append({
+                "type": tag,
+                "typeLabel": label,
+                "typeColor": bg,
+                "typeText": color,
+                "title": title,
+                "body": body[:300] + "..." if len(body) > 300 else body,
+                "source": p.get("source", ""),
+                "url": p.get("url", ""),
+                "location": "Nigeria",
+                "time": time_label,
+                "query": title
+            })
+        return {"incidents": news}
+    except Exception as e:
+        return {"incidents": [], "error": str(e)}
