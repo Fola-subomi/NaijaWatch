@@ -60,72 +60,75 @@
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  .news-ticker {
+  /* VERTICAL TICKER */
+.news-ticker-vertical {
   background: rgba(5, 8, 22, 0.98);
   border-bottom: 1px solid #1e2a3a;
-  color: #F3F4F6;
-  padding: 7px 0;
   display: flex;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
-.ticker-wrapper {
-  flex: 1;
+  align-items: stretch;
+  height: 36px;
   overflow: hidden;
 }
 
-  .ticker-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background: #DC2626;
-    color: #fff;
-    padding: 3px 14px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-    box-shadow: 4px 0 8px rgba(0,0,0,0.5);
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-    margin-right: 16px;
-  }
-
-  .ticker-track {
-    display: flex;
-    gap: 48px;
-    animation: ticker 50s linear infinite;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .ticker-track:hover { animation-play-state: paused; }
-
-  @keyframes ticker {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .ticker-item {
-  font-size: 12px;
-  opacity: 0.8;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: opacity 0.15s;
+.vticker-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: #DC2626;
+  color: #fff;
+  padding: 0 14px;
   white-space: nowrap;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  box-shadow: 4px 0 8px rgba(0,0,0,0.5);
 }
 
-  .ticker-item:hover { opacity: 1; color: #22D3EE; }
-  .ticker-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.vticker-window {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 36px;
+}
 
+.vticker-track {
+  position: absolute;
+  width: 100%;
+  animation: vticker 20s linear infinite;
+}
+
+.vticker-track:hover { animation-play-state: paused; }
+
+@keyframes vticker {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.vticker-item {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 12px;
+  color: #d1d5db;
+  cursor: pointer;
+  gap: 8px;
+  transition: color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vticker-item:hover { color: #22D3EE; }
+
+.vticker-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
   /* SEARCH */
   .search-section {
     background: rgba(17, 24, 39, 0.9);
@@ -547,10 +550,12 @@
   </div>
 </div>
 
-<div class="news-ticker">
-  <span class="ticker-label">🔴 Breaking</span>
-  <div class="ticker-track" id="tickerTrack">
-    <span style="opacity:0.6">Loading latest incidents...</span>
+<div class="news-ticker-vertical">
+  <div class="vticker-label">🔴 Breaking</div>
+  <div class="vticker-window">
+    <div class="vticker-track" id="tickerTrack">
+      <span style="opacity:0.5;font-size:12px;padding:8px 0;display:block">Loading latest incidents...</span>
+    </div>
   </div>
 </div>
 
@@ -665,23 +670,19 @@ let currentPopupNews = null;
 function buildTicker() {
   const track = document.getElementById("tickerTrack");
   if (!LIVE_NEWS.length) return;
-  // repeat 4 times to ensure ticker is always wide enough to scroll seamlessly
-  const items = [...LIVE_NEWS, ...LIVE_NEWS, ...LIVE_NEWS, ...LIVE_NEWS];
+  // duplicate for seamless loop
+  const items = [...LIVE_NEWS, ...LIVE_NEWS];
   track.innerHTML = items.map((n, i) => `
-    <span class="ticker-item" onclick="openPopup(${i % LIVE_NEWS.length})">
-      <span class="ticker-dot" style="background:${n.typeText}"></span>
-      ${n.location}: ${n.title}
-    </span>
+    <div class="vticker-item" onclick="openPopup(${i % LIVE_NEWS.length})">
+      <span class="vticker-dot" style="background:${n.typeText || '#22D3EE'}"></span>
+      <span>${n.location}: ${n.title}</span>
+    </div>
   `).join("");
 
-  // adjust animation duration based on content width so it never cuts off
-  setTimeout(() => {
-    const trackWidth = track.scrollWidth;
-    const duration = trackWidth / 120; // 120px per second
-    track.style.animationDuration = `${duration}s`;
-  }, 100);
+  // set animation duration based on number of items
+  const duration = LIVE_NEWS.length * 3; // 3 seconds per item
+  track.style.animationDuration = `${duration}s`;
 }
-
 function buildRecentList() {
   const list = document.getElementById("recentNewsList");
   if (!LIVE_NEWS.length) {
