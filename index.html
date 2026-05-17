@@ -106,18 +106,16 @@
   }
 
   .ticker-item {
-    font-size: 12px;
-    opacity: 0.8;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.15s;
-    max-width: 320px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  font-size: 12px;
+  opacity: 0.8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
   .ticker-item:hover { opacity: 1; color: #22D3EE; }
   .ticker-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
