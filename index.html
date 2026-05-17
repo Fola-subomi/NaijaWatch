@@ -60,14 +60,21 @@
 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* TICKER */
   .news-ticker {
   background: rgba(5, 8, 22, 0.98);
   border-bottom: 1px solid #1e2a3a;
   color: #F3F4F6;
   padding: 7px 0;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.ticker-wrapper {
+  flex: 1;
+  overflow: hidden;
 }
 
   .ticker-label {
@@ -658,13 +665,21 @@ let currentPopupNews = null;
 function buildTicker() {
   const track = document.getElementById("tickerTrack");
   if (!LIVE_NEWS.length) return;
-  const items = [...LIVE_NEWS, ...LIVE_NEWS];
+  // repeat 4 times to ensure ticker is always wide enough to scroll seamlessly
+  const items = [...LIVE_NEWS, ...LIVE_NEWS, ...LIVE_NEWS, ...LIVE_NEWS];
   track.innerHTML = items.map((n, i) => `
     <span class="ticker-item" onclick="openPopup(${i % LIVE_NEWS.length})">
       <span class="ticker-dot" style="background:${n.typeText}"></span>
       ${n.location}: ${n.title}
     </span>
   `).join("");
+
+  // adjust animation duration based on content width so it never cuts off
+  setTimeout(() => {
+    const trackWidth = track.scrollWidth;
+    const duration = trackWidth / 80; // 80px per second
+    track.style.animationDuration = `${duration}s`;
+  }, 100);
 }
 
 function buildRecentList() {
