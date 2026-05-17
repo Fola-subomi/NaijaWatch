@@ -62,14 +62,27 @@
 
   /* TICKER */
   .news-ticker {
-    background: rgba(5, 8, 22, 0.98);
-    border-bottom: 1px solid #1e2a3a;
-    color: #F3F4F6;
-    padding: 7px 0;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-  }
+  background: rgba(5, 8, 22, 0.98);
+  border-bottom: 1px solid #1e2a3a;
+  color: #F3F4F6;
+  padding: 7px 0;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  position: relative;
+}
+
+.news-ticker::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: linear-gradient(to right, transparent, #050816);
+  pointer-events: none;
+  z-index: 2;
+}
 
   .ticker-label {
     font-size: 10px;
@@ -617,11 +630,11 @@
 
   <div class="sidebar-card">
     <div class="sidebar-title">Threat types</div>
-    <button class="zone-btn" onclick="ask('Kidnapping incidents Nigeria')">👤 Kidnappings</button>
-    <button class="zone-btn" onclick="ask('Armed bandit attacks Nigeria')">🔫 Armed attacks</button>
-    <button class="zone-btn" onclick="ask('Cybercrime fraud Nigeria')">💻 Cybercrime</button>
-    <button class="zone-btn" onclick="ask('EFCC fraud arrests Nigeria')">🏦 Financial fraud</button>
-    <button class="zone-btn" onclick="ask('Terrorist insurgency Nigeria')">⚠️ Insurgency</button>
+    <button class="zone-btn" onclick="ask('Kidnapping incidents Nigeria')"> Kidnappings</button>
+    <button class="zone-btn" onclick="ask('Armed bandit attacks Nigeria')"> Armed attacks</button>
+    <button class="zone-btn" onclick="ask('Cybercrime fraud Nigeria')"> Cybercrime</button>
+    <button class="zone-btn" onclick="ask('EFCC fraud arrests Nigeria')"> Financial fraud</button>
+    <button class="zone-btn" onclick="ask('Terrorist insurgency Nigeria')"> Insurgency</button>
   </div>
 
   <div class="sidebar-card">
