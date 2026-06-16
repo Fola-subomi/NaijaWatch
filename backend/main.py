@@ -125,12 +125,23 @@ def recent():
     try:
         results, _ = qdrant.scroll(
             collection_name=COLLECTION_NAME,
-            limit=10,
+            limit=100,  # grab more then sort
             with_payload=True,
             with_vectors=False
         )
+
+        # sort by scraped_at descending to get most recent first
+        sorted_results = sorted(
+            results,
+            key=lambda x: x.payload.get("scraped_at", ""),
+            reverse=True
+        )
+
+        # take top 10 most recent
+        top10 = sorted_results[:10]
+
         news = []
-        for r in results:
+        for r in top10:
             p = r.payload
             tag = p.get("tag", "general")
             type_map = {
